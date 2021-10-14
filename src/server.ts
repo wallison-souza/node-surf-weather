@@ -4,9 +4,7 @@ import { Application } from 'express';
 import express from 'express';
 import { ForecastController } from './controllers/forecast';
 
-
 export class SetupServer extends Server {
-
   /*
    * same as this.port = port, declaring as private here will
    * add the port variable to the SetupServer instance
@@ -34,7 +32,7 @@ export class SetupServer extends Server {
     this.addControllers([forecastController]);
   }
 
-  public getApp(): Application{
+  public getApp(): Application {
     return this.app;
   }
 }
