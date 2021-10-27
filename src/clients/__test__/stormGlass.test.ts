@@ -10,11 +10,13 @@ describe('StormGlass client', () => {
     const lat = -33.7927216;
     const lng = 151.2545445;
 
-    axios.get = jest.fn().mockResolvedValue(stormGlassWeather3HoursFixture);
+    axios.get = jest
+      .fn()
+      .mockResolvedValue({ data: stormGlassWeather3HoursFixture });
 
     const stormGlass = new StormGlass(axios);
     const response = await stormGlass.fetchPoint(lat, lng);
 
-    expect(response).toEqual({});
+    expect(response).toEqual(stormGlassNormalized3HoursFixture);
   });
 });
