@@ -7,7 +7,9 @@ jest.mock('@src/utils/request');
 
 describe('StormGlass client', () => {
   /* mock da classe */
-  const MockedRequestClass = HTTPUtil.Request as jest.Mocked<typeof HTTPUtil.Request>; 
+  const MockedRequestClass = HTTPUtil.Request as jest.Mocked<
+    typeof HTTPUtil.Request
+  >;
   /*mock da instância da classe */
   const mockedRequest = new HTTPUtil.Request() as jest.Mocked<HTTPUtil.Request>;
 
@@ -15,8 +17,8 @@ describe('StormGlass client', () => {
     const lat = -33.7927216;
     const lng = 151.2545445;
 
-    mockedRequest.get.mockResolvedValue({ 
-      data: stormGlassWeather3HoursFixture 
+    mockedRequest.get.mockResolvedValue({
+      data: stormGlassWeather3HoursFixture,
     } as HTTPUtil.Response);
 
     const stormGlass = new StormGlass(mockedRequest);
@@ -33,15 +35,15 @@ describe('StormGlass client', () => {
         {
           windDirection: {
             noaa: 300,
-          }, 
+          },
           time: '2020-04-26T00:00:00+00:00',
         },
       ],
     };
 
     mockedRequest.get.mockResolvedValue({
-       data: incompleteResponse 
-      } as HTTPUtil.Response);
+      data: incompleteResponse,
+    } as HTTPUtil.Response);
 
     const stormGlass = new StormGlass(mockedRequest);
     const response = await stormGlass.fetchPoint(lat, lng);
@@ -69,8 +71,8 @@ describe('StormGlass client', () => {
     mockedRequest.get.mockRejectedValue({
       response: {
         status: 429,
-        data: { errors: ['Rate Limit reached']},
-      }
+        data: { errors: ['Rate Limit reached'] },
+      },
     });
 
     const stormGlass = new StormGlass(mockedRequest);

@@ -1,4 +1,3 @@
-import { ForecastController } from '@src/controllers/forecast';
 import { InternalError } from '@src/utils/errors/internal-error';
 import { AxiosError } from 'axios';
 import * as HTTPUtil from '@src/utils/request';
@@ -34,23 +33,25 @@ export interface ForecastPoint {
   windSpeed: number;
 }
 
-export class ClientRequestError extends InternalError{
-  constructor(message: string){
-    const internalMessage = 
+export class ClientRequestError extends InternalError {
+  constructor(message: string) {
+    const internalMessage =
       'Unexpected error when trying to communicate to StormGlass';
     super(`${internalMessage}: ${message}`);
   }
 }
 
-export class StormGlassResponseError extends InternalError{
-  constructor(message: string){
-    const internalMessage = 
+export class StormGlassResponseError extends InternalError {
+  constructor(message: string) {
+    const internalMessage =
       'Unexpected error returned by the StormGlass service';
     super(`${internalMessage}: ${message}`);
   }
 }
 
-const stormGlassResourceConfig: IConfig = config.get('App.resources.StormGlass');
+const stormGlassResourceConfig: IConfig = config.get(
+  'App.resources.StormGlass'
+);
 
 export class StormGlass {
   readonly stormGlassAPIParams =
@@ -60,9 +61,13 @@ export class StormGlass {
   constructor(protected request = new HTTPUtil.Request()) {}
 
   public async fetchPoint(lat: number, lng: number): Promise<ForecastPoint[]> {
-    try{
+    try {
       const response = await this.request.get<StormGlassForecastResponse>(
-        `${stormGlassResourceConfig.get('apiUrl')}/weather/point?lat=${lat}&lng=${lng}&params=${this.stormGlassAPIParams}&source=${this.stormGlassAPISource}`,
+        `${stormGlassResourceConfig.get(
+          'apiUrl'
+        )}/weather/point?lat=${lat}&lng=${lng}&params=${
+          this.stormGlassAPIParams
+        }&source=${this.stormGlassAPISource}`,
         {
           headers: {
             Authorization: stormGlassResourceConfig.get('apiToken'),
@@ -70,8 +75,7 @@ export class StormGlass {
         }
       );
       return this.normalizeResponse(response.data);
-
-    } catch(err: unknown) {
+    } catch (err: unknown) {
       if (HTTPUtil.Request.isRequestError(err as AxiosError)) {
         throw new StormGlassResponseError(
           `Error: ${JSON.stringify((err as AxiosError).response?.data)} Code: ${
