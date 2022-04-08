@@ -8,7 +8,7 @@ export interface StormGlassPointSource {
 }
 
 export interface StormGlassPoint {
-  readonly time: string;
+  time: string;
   readonly waveHeight: StormGlassPointSource;
   readonly waveDirection: StormGlassPointSource;
   readonly swellDirection: StormGlassPointSource;
@@ -75,11 +75,8 @@ export class StormGlass {
         }
       );
       return this.normalizeResponse(response.data);
-    } catch (err) {
-      //@Updated 2022 to support Error as unknown
-      //https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#use-unknown-catch-variables
-      if (err instanceof Error && HTTPUtil.Request.isRequestError(err)) {
-        const error = HTTPUtil.Request.extractErrorData(err);
+    } catch (err: unknown) {
+      if (HTTPUtil.Request.isRequestError(err as AxiosError)) {
         throw new StormGlassResponseError(
           `Error: ${JSON.stringify((err as AxiosError).response?.data)} Code: ${
             (err as AxiosError).response?.status
