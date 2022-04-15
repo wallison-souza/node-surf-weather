@@ -22,7 +22,7 @@ describe('Users functional tests', () => {
           ...{ password: expect.any(String) },
         })
       );
-      console.log( response.body.password)
+      console.log(response.body.password);
       await expect(
         AuthService.comparePasswords(newUser.password, response.body.password)
       ).resolves.toBeTruthy();
@@ -57,6 +57,50 @@ describe('Users functional tests', () => {
     expect(response.body).toEqual({
       code: 409,
       error: 'User validation failed: email: already exists in the database.',
+    });
+  });
+
+  describe('when authenticating a user', () => {
+    it('should generate a token for a valid user', async () => {
+      const newUser = {
+        name: 'Jhon Doe',
+        email: 'john@email.com',
+        password: '1234',
+      };
+
+      await new User(newUser).save();
+      const response = await global.testRequest
+        .post('/users/authenticate')
+        .send({ email: newUser.email, password: newUser.password });
+      expect(response.body).toEqual(
+        expect.objectContaining({ token: expect.any(String) })
+      );
+    });
+
+    it('Should return UNAUTHORIZED if the user with the given email is not found', async () => {
+      const User = {
+        email: 'john@email.com',
+        password: '1234',
+      };
+      const response = await global.testRequest
+        .post('/users/authenticate')
+        .send(User);
+
+      expect(response.status).toBe(401);
+    });
+
+    it.only('Should return UNAUTHORIZED if the user is found but the password does not match', async () => {
+      const newUser = {
+        name: 'Jhon Doe',
+        email: 'john@email.com',
+        password: '1234',
+      };
+
+      await new User(newUser).save();
+      const response = await global.testRequest
+        .post('/users/authenticate')
+        .send({email: newUser.email, password: '2312'});
+      expect(response.status).toBe(401);
     });
   });
 });
