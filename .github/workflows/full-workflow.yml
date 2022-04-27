@@ -1,6 +1,6 @@
-name: Complete Workflow
+name: Complete workflow
 
-on: 
+on:
   push:
     branches:
       - main
@@ -18,26 +18,24 @@ jobs:
 
     strategy:
       matrix:
-      node-version: [15.x]
-      mongodb-version: [5.0]
+        node-version: [12.x]
+        mongodb-version: [4.2]
+
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.1.0
-        with:
-          mongodb-version: ${{ matrix.mongodb-version }}
-      
-      - name: Install dependencies
-        run: yarn --frozen-lockfile
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
 
-      - name: Run all tests
-        run: yarn test
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.1.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
 
+    - name: Install dependencies
+      run: yarn --frozen-lockfile
 
-  
+    - name: Run all tests
+      run: yarn test
