@@ -11,8 +11,7 @@
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*.ts'",
     "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*.ts'",
-    "test": "yarn test:functional",
-    "test:functional": "jest --projects ./test --runInBand"
+    "test": "yarn jest --projects ./test --runInBand"
   },
   "postinstall": "yarn build",
   "engines": {"node": "15"},
