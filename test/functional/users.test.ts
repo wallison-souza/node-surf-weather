@@ -99,7 +99,7 @@ describe('Users functional tests', () => {
       await new User(newUser).save();
       const response = await global.testRequest
         .post('/users/authenticate')
-        .send({email: newUser.email, password: '2312'});
+        .send({ email: newUser.email, password: '2312' });
       expect(response.status).toBe(401);
     });
   });

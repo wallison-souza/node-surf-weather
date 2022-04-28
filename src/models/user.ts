@@ -40,15 +40,15 @@ schema.path('email').validate(
   CUSTOM_VALIDATION.DUPLICATED
 );
 
-schema.pre<UserModel>('save', async function(): Promise<void> {
-  if(!this.password || !this.isModified('password')) {
+schema.pre<UserModel>('save', async function (): Promise<void> {
+  if (!this.password || !this.isModified('password')) {
     return;
   }
 
   try {
     const hashedPassword = await Auth.hashPassword(this.password);
     this.password = hashedPassword;
-  } catch(error) {
+  } catch (error) {
     console.error(`Error hashing the password for the user ${this.name}`);
   }
 });

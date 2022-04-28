@@ -11,10 +11,14 @@
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*.ts'",
     "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*.ts'",
-    "test": "yarn jest --projects ./test --runInBand"
+    "test": "yarn lint && yarn style:check && yarn test:unit && yarn test:functional",
+    "test:functional": "jest --projects ./test --runInBand",
+    "test:unit": "jest"
   },
   "postinstall": "yarn build",
-  "engines": {"node": "15"},
+  "engines": {
+    "node":"15" 
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wallison-souza/node-surf-weather.git"

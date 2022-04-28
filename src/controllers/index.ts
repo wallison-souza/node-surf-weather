@@ -3,10 +3,7 @@ import { Response } from 'express';
 import mongoose from 'mongoose';
 
 export abstract class BaseController {
-  protected sendCreateUpdateErrorResponse(
-    res: Response,
-    error: unknown
-  ): void {
+  protected sendCreateUpdateErrorResponse(res: Response, error: unknown): void {
     if (error instanceof mongoose.Error.ValidationError) {
       const clientErrors = this.handleClientErrors(error);
       res.status(clientErrors.code).send(clientErrors);
